@@ -13,6 +13,10 @@ state_path = {{ nova_system_home_folder }}
 rootwrap_config = /etc/nova/rootwrap.conf
 service_down_time = 120
 
+{% if nova_ssl_external | bool %}
+secure_proxy_ssl_header = {{ nova_secure_proxy_ssl_header }}
+{% endif %}
+
 # Quota
 quota_cores = {{ nova_quota_cores }}
 quota_fixed_ips = {{ nova_quota_fixed_ips }}
@@ -172,6 +176,7 @@ user_domain_name = {{ neutron_service_domain_name |default("Default") }}
 project_domain_name = {{ neutron_service_domain_name |default("Default") }}
 # Keystone client plugin authentication URL option
 auth_url = {{ keystone_service_adminurl }}
+insecure = {{ keystone_service_adminuri_insecure | bool }}
 metadata_proxy_shared_secret = {{ nova_metadata_proxy_secret }}
 service_metadata_proxy = {{ nova_metadata_proxy_enabled }}
 
