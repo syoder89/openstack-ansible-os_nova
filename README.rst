@@ -1,27 +1,14 @@
-OpenStack nova
-##############
-:tags: openstack, nova, cloud, ansible
+os_nova role
+############
+:tags: openstack, cloud, ansible, os_nova
 :category: \*nix
 
-Role for deployment, setup and installation of nova.
-
-This role will install the following:
-    * nova-consoleauth
-    * nova-conductor
-    * nova-compute
-    * nova-cert
-    * nova-api-metadata
-    * nova-spicehtml5proxy
-    * nova-api-ec2
-    * nova-api-os-compute
-    * nova-api-ec2
+os_nova Role
 
 .. code-block:: yaml
 
-    - name: Installation and setup of Nova
-      hosts: nova_all
+    - name: os_nova role
+      hosts: "hosts"
       user: root
       roles:
-        - { role: "os_nova", tags: [ "os-nova" ] }
-      vars:
-        nova_galera_address: "{{ internal_lb_vip_address }}"
+        - { role: "os_nova" }

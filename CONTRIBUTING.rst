@@ -1,6 +1,6 @@
-OpenStack nova
-##############
-:tags: openstack, nova, cloud, ansible
+os_nova
+#######
+:tags: openstack, cloud, ansible
 :category: \*nix
 
 contributor guidelines
