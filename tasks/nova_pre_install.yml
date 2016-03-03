@@ -109,6 +109,13 @@
     - nova-dirs
     - nova-logs
 
-- include: nova_messaging_setup.yml
-  when: >
-    inventory_hostname == groups['nova_all'][0]
+- name: Drop sudoers file
+  template:
+    src: "sudoers.j2"
+    dest: "/etc/sudoers.d/{{ nova_system_user_name }}_sudoers"
+    mode: "0440"
+    owner: "root"
+    group: "root"
+  tags:
+    - sudoers
+    - nova-sudoers
