@@ -164,8 +164,10 @@ nova_console_ssl_dir: "/etc/nova/ssl"
 nova_console_ssl_cert: "{{ nova_console_ssl_dir }}/nova-console.pem"
 nova_console_ssl_key: "{{ nova_console_ssl_dir }}/nova-console.key"
 
+# Set to true when terminating SSL/TLS at a load balancer
+nova_external_ssl: false
+
 # External SSL forwarding proto
-nova_ssl_external: true
 nova_secure_proxy_ssl_header: HTTP_X_FORWARDED_PROTO
 
 ## Nova global config
