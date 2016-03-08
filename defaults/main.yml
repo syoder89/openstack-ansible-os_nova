@@ -45,12 +45,24 @@ nova_venv_download_url: http://127.0.0.1/venvs/untagged/ubuntu/nova.tgz
 
 nova_fatal_deprecations: False
 
-## System info
+## Nova user information
 nova_system_user_name: nova
 nova_system_group_name: nova
 nova_system_shell: /bin/bash
 nova_system_comment: nova system user
 nova_system_home_folder: "/var/lib/{{ nova_system_user_name }}"
+
+## Manually specified nova UID/GID
+# Deployers can specify a UID for the nova user as well as the GID for the
+# nova group if needed. This is commonly used in environments where shared
+# storage is used, such as NFS or GlusterFS, and nova UID/GID values must be
+# in sync between multiple servers.
+#
+# WARNING: Changing these values on an existing deployment can lead to
+#          failures, errors, and instability.
+#
+# nova_system_user_uid = <UID>
+# nova_system_group_gid = <GID>
 
 ## DB
 nova_galera_user: nova

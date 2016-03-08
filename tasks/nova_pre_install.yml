@@ -16,6 +16,7 @@
 - name: create the system group
   group:
     name: "{{ nova_system_group_name }}"
+    gid: "{{ nova_system_group_uid|default(omit) }}"
     state: "present"
     system: "yes"
   tags:
@@ -37,6 +38,7 @@
 - name: Create the nova system user
   user:
     name: "{{ nova_system_user_name }}"
+    uid: "{{ nova_system_user_uid|default(omit) }}"
     group: "{{ nova_system_group_name }}"
     comment: "{{ nova_system_comment }}"
     shell: "{{ nova_system_shell }}"
