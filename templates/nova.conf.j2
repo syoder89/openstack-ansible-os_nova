@@ -156,18 +156,13 @@ vncserver_proxyclient_address = {{ nova_novncproxy_vncserver_proxyclient_address
 
 # Glance
 [glance]
-{% if glance_api_servers is defined %}
 api_servers = {{ glance_api_servers }}
-{% else %}
-host = {{ glance_host }}
-port = {{ glance_service_port }}
-{% endif %}
 
 # Neutron
 [neutron]
 url = {{ neutron_service_adminurl }}
 region_name = {{ neutron_service_region }}
-auth_plugin = password
+auth_type = password
 # Keystone client plugin password option
 password = {{ neutron_service_password }}
 # Keystone client plugin username option
@@ -183,7 +178,6 @@ service_metadata_proxy = {{ nova_metadata_proxy_enabled }}
 
 
 [conductor]
-use_local = false
 topic = conductor
 manager = nova.conductor.manager.ConductorManager
 workers = {{ nova_conductor_workers | default(api_threads) }}
