@@ -71,6 +71,13 @@ nova_db_max_overflow: 10
 nova_db_max_pool_size: 120
 nova_db_pool_timeout: 30
 
+## DB API
+nova_api_galera_user: nova_api
+nova_api_galera_database: nova_api
+nova_api_db_max_overflow: 10
+nova_api_db_max_pool_size: 120
+nova_api_db_pool_timeout: 30
+
 ## RabbitMQ info
 nova_rabbitmq_userid: nova
 nova_rabbitmq_vhost: /nova
