@@ -56,11 +56,26 @@
     - nova-install
     - nova-pip-packages
 
-- name: Set constraint file fact for developer mode
-  set_fact:
-    pip_install_options: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt"
+- name: Clone requirements git repository
+  git:
+    repo: "{{ nova_requirements_git_repo }}"
+    dest: "/opt/requirements"
+    clone: yes
+    update: yes
+    version: "{{ nova_requirements_git_install_branch }}"
   when:
     - nova_developer_mode | bool
+  tags:
+    - nova-install
+    - nova-pip-packages
+
+- name: Add constraints to pip_install_options fact for developer mode
+  set_fact:
+    pip_install_options: "{{ pip_install_options|default('') }} --constraint /opt/developer-pip-constraints.txt --constraint /opt/requirements/upper-constraints.txt"
+  when:
+    - nova_developer_mode | bool
+    - "'/opt/developer-pip-constraints.txt' not in pip_install_options|default('')"
+    - "'/opt/requirements/upper-constraints.txt' not in pip_install_options|default('')"
   tags:
     - nova-install
     - nova-pip-packages
