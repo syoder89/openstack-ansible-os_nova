@@ -90,8 +90,42 @@ nova_rpc_thread_pool_size: 64
 nova_rpc_conn_pool_size: 30
 nova_rpc_response_timeout: 60
 
-## Nova virtualization Type, set to KVM if supported
-# Current supported choice: qemu or kvm
+## Nova virtualization Types
+# The nova_virt_types dictionary contains global overrides used for
+#  specific compute types. Every variable inside of this dictionary
+#  will become an ansible fact. This gives the user the option to set
+#  or customize things based on their needs without having to redefine
+#  this entire data structure. Every supported compute type will be
+#  have its specific variable requirements set under its short name.
+nova_virt_types:
+  ironic:
+    nova_compute_driver: nova.virt.ironic.IronicDriver
+    nova_scheduler_host_manager: nova.scheduler.ironic_host_manager.IronicHostManager
+    nova_reserved_host_memory_mb: 0
+    # NOTE(mrda): It's possible to use ironic.nova.compute.manager.ClusteredComputeManager
+    # here, but at the current time it's not recommended
+    nova_compute_manager: nova.compute.manager.ComputeManager
+    nova_firewall_driver: nova.virt.firewall.NoopFirewallDriver
+    nova_scheduler_use_baremetal_filters: True
+    nova_scheduler_tracks_instance_changes: False
+  kvm:
+    nova_compute_driver: libvirt.LibvirtDriver
+    nova_scheduler_host_manager: nova.scheduler.host_manager.HostManager
+    nova_reserved_host_memory_mb: 2048
+    nova_compute_manager: nova.compute.manager.ComputeManager
+    nova_firewall_driver: nova.virt.firewall.NoopFirewallDriver
+    nova_scheduler_use_baremetal_filters: False
+    nova_scheduler_tracks_instance_changes: True
+  qemu:
+    nova_compute_driver: libvirt.LibvirtDriver
+    nova_scheduler_host_manager: nova.scheduler.host_manager.HostManager
+    nova_reserved_host_memory_mb: 2048
+    nova_compute_manager: nova.compute.manager.ComputeManager
+    nova_firewall_driver: nova.virt.firewall.NoopFirewallDriver
+    nova_scheduler_use_baremetal_filters: False
+    nova_scheduler_tracks_instance_changes: True
+
+# Current supported choice: qemu or kvm or ironic
 # If this is not set, then the playbook will try to guess it.
 #nova_virt_type: kvm
 
@@ -166,6 +200,7 @@ nova_enable_instance_password: True
 nova_compute_program_name: nova-compute
 nova_force_config_drive: False
 
+
 ## Nova libvirt
 nova_libvirt_inject_key: False
 # inject partition options:
@@ -200,8 +235,8 @@ nova_secure_proxy_ssl_header: HTTP_X_FORWARDED_PROTO
 ## Nova global config
 nova_cpu_mode: host-model
 nova_linuxnet_interface_driver: nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver
-nova_firewall_driver: nova.virt.firewall.NoopFirewallDriver
-nova_compute_driver: libvirt.LibvirtDriver
+
+
 nova_max_age: 0
 nova_remove_unused_resized_minimum_age_seconds: 3600
 nova_image_cache_manager_interval: 0
@@ -235,7 +270,7 @@ nova_max_io_ops_per_host: 10
 nova_ram_allocation_ratio: 1.0
 nova_ram_weight_multiplier: 5.0
 nova_reserved_host_disk_mb: 2048
-nova_reserved_host_memory_mb: 2048
+
 nova_scheduler_driver_task_period: 60
 nova_scheduler_host_subset_size: 10
 nova_scheduler_max_attempts: 5
@@ -342,6 +377,7 @@ nova_requires_pip_packages:
 
 nova_compute_pip_packages:
   - libvirt-python
+  - python-ironicclient
 
 # Common pip packages
 nova_pip_packages:
