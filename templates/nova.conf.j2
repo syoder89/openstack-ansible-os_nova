@@ -12,6 +12,7 @@ log_dir = /var/log/nova
 state_path = {{ nova_system_home_folder }}
 rootwrap_config = /etc/nova/rootwrap.conf
 service_down_time = 120
+default_schedule_zone = {{ nova_default_schedule_zone }}
 
 {% if nova_external_ssl | bool %}
 secure_proxy_ssl_header = {{ nova_secure_proxy_ssl_header }}
