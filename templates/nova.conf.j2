@@ -52,6 +52,8 @@ scheduler_host_manager = {{ nova_scheduler_host_manager }}
 scheduler_host_subset_size = {{ nova_scheduler_host_subset_size }}
 scheduler_max_attempts = {{ nova_scheduler_max_attempts }}
 scheduler_weight_classes = {{ nova_scheduler_weight_classes }}
+scheduler_use_baremetal_filters = {{ nova_scheduler_use_baremetal_filters }}
+scheduler_tracks_instance_changes = {{ nova_scheduler_tracks_instance_changes }}
 
 # Compute
 enable_instance_password = {{ nova_enable_instance_password }}
@@ -62,6 +64,7 @@ api_paste_config = /etc/nova/api-paste.ini
 allow_resize_to_same_host = True
 image_cache_manager_interval = {{ nova_image_cache_manager_interval }}
 resume_guests_state_on_host_boot = {{ nova_resume_guests_state_on_host_boot }}
+compute_manager = {{ nova_compute_manager }}
 
 {% if nova_console_user_ssl_cert is defined and nova_console_user_ssl_key is defined and inventory_hostname in groups['nova_console'] %}
 # Console SSL keys
@@ -234,6 +237,17 @@ rabbit_password = {{ nova_rabbitmq_password }}
 rabbit_virtual_host = {{ nova_rabbitmq_vhost }}
 rabbit_hosts = {{ rabbitmq_servers }}
 rabbit_use_ssl = {{ rabbitmq_use_ssl }}
+
+
+{% if nova_virt_type == 'ironic' %}
+[ironic]
+# TODO(mrda): These should be changed to support the Keystone v3 API
+admin_username = {{ ironic_service_name }}
+admin_password = {{ ironic_service_password }}
+admin_tenant_name = {{ ironic_service_project_name }}
+admin_url = {{ keystone_service_adminuri }}/v2.0
+api_endpoint = {{ ironic_service_adminurl }}
+{% endif %}
 
 
 [libvirt]
