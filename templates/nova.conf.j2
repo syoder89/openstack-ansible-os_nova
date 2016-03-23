@@ -93,6 +93,7 @@ dhcp_domain = {{ nova_dhcp_domain }}
 force_dhcp_release = True
 dhcpbridge_flagfile = /etc/nova/nova.conf
 firewall_driver = {{ nova_firewall_driver }}
+use_forwarded_for = {{ nova_network_services[nova_network_type]['use_forwarded_for'] | bool }}
 my_ip = {{ nova_management_address }}
 default_floating_pool = public
 security_group_api = neutron
@@ -177,7 +178,9 @@ auth_url = {{ keystone_service_adminurl }}
 insecure = {{ keystone_service_adminuri_insecure | bool }}
 metadata_proxy_shared_secret = {{ nova_metadata_proxy_secret }}
 service_metadata_proxy = {{ nova_metadata_proxy_enabled }}
-
+{% if nova_network_services[nova_network_type]['ovs_bridge'] is defined %}
+ovs_bridge = {{ nova_network_services[nova_network_type]['ovs_bridge'] }}
+{% endif %}
 
 [conductor]
 topic = conductor
