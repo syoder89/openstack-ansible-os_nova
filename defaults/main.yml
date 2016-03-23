@@ -244,6 +244,14 @@ nova_resume_guests_state_on_host_boot: False
 nova_dhcp_domain: novalocal
 nova_default_schedule_zone: nova
 glance_api_servers: "{{ glance_host }}:{{ glance_service_port }}"
+nova_network_type: linuxbridge
+
+nova_network_services:
+  linuxbridge:
+    use_forwarded_for: False
+  nuage:
+    use_forwarded_for: True
+    ovs_bridge: alubr0
 
 # Nova quota
 nova_quota_cores: 20
