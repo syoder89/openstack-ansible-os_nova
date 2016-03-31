@@ -59,7 +59,7 @@
   with_items: nova_compute_pip_packages
   when:
     - nova_venv_enabled | bool
-    - nova_get_venv | failed
+    - nova_get_venv | failed or nova_developer_mode | bool
   tags:
     - nova-install
     - nova-pip-packages
