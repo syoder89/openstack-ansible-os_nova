@@ -29,7 +29,7 @@
         - libffi-dev
         - pkg-config
         - libvirt-dev
-      when: inventory_hostname in groups['nova_compute']
+      when: inventory_hostname in groups['nova_all']
     - name: Ensure rabbitmq vhost
       rabbitmq_vhost:
         name: "{{ nova_rabbitmq_vhost }}"

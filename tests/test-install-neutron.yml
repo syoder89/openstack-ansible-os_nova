@@ -18,6 +18,14 @@
   user: root
   gather_facts: true
   pre_tasks:
+    # NOTE: These are typically installed in the repo server where we build the
+    #       neutron wheel
+    - name: Install packages required to build neutron python package
+      apt:
+        name: "{{ item }}"
+      with_items:
+        - libffi-dev
+      when: inventory_hostname in groups['neutron_all']
     - name: Ensure rabbitmq vhost
       rabbitmq_vhost:
         name: "{{ neutron_rabbitmq_vhost }}"
