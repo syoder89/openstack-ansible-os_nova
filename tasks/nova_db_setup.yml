@@ -82,3 +82,12 @@
     - nova-db-setup
     - nova-setup
     - nova-command-bin
+
+- name: Perform Nova online data migrations
+  command: "{{ nova_bin }}/nova-manage db online_data_migrations"
+  become: yes
+  become_user: "{{ nova_system_user_name }}"
+  tags:
+    - nova-db-setup
+    - nova-setup
+    - nova-command-bin
