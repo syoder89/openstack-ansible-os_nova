@@ -60,6 +60,9 @@
     - name: Set neutron_subnet_name fact
       set_fact:
         neutron_subnet_name: "functional-subnet-{{ 100|random }}"
+    - name: Set nova_flavor_name fact
+      set_fact:
+        nova_flavor_name: "functional-flavor-{{ 100|random }}"
     - name: Upload the Cirros image
       glance:
         command: 'image-create'
@@ -95,10 +98,14 @@
         net_name: "{{ neutron_net_name }}"
         subnet_name: "{{ neutron_subnet_name }}"
         cidr: "192.168.74.0/24"
+    - name: Create test flavor
+      shell: |
+        . /root/openrc
+        {{ nova_venv_bin }}/nova flavor-create {{ nova_flavor_name }} 101 256 1 1
     - name: Create nova instance
       shell: |
         . /root/openrc
-        {{ nova_venv_bin }}/nova boot --image {{ glance_image_name }} --flavor 1 --nic net-id={{ neutron_networks[neutron_net_name]['id'] }} {{ nova_instance_name }}
+        {{ nova_venv_bin }}/nova boot --image {{ glance_image_name }} --flavor 101 --nic net-id={{ neutron_networks[neutron_net_name]['id'] }} {{ nova_instance_name }}
     - name: Verify nova instance goes active
       shell: |
         . /root/openrc
