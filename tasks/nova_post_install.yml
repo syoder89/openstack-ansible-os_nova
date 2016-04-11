@@ -13,6 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE(cloudnull) this task is not in dict formation because it is
+#  dynamically loading facts from the nova_virt_types based on the
+#  nova_virt_type setting.
+- name: Set nova config facts
+  set_fact: '{{ item.key }}="{{ item.value }}"'
+  with_dict: "{{ nova_virt_types[nova_virt_type] }}"
+  when:
+    - item.key not in hostvars[inventory_hostname] or item.key is undefined
+  tags:
+    - nova-config
+    - nova-post-install
+
 - name: Generate nova config
   config_template:
     src: "{{ item.src }}"
