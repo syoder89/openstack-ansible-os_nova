@@ -317,6 +317,7 @@ nova_service_in_ldap: false
 nova_libvirtd_listen_tls: 1
 nova_libvirtd_listen_tcp: 0
 nova_libvirtd_auth_tcp: sasl
+nova_libvirtd_debug_log_filters: "3:remote 4:event 3:json 3:rpc"
 
 ## Service Names
 nova_service_names:
