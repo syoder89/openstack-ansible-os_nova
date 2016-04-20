@@ -100,7 +100,7 @@ nova_rpc_response_timeout: 60
 nova_virt_types:
   ironic:
     nova_compute_driver: nova.virt.ironic.IronicDriver
-    nova_scheduler_host_manager: nova.scheduler.ironic_host_manager.IronicHostManager
+    nova_scheduler_host_manager: ironic_host_manager
     nova_reserved_host_memory_mb: 0
     # NOTE(mrda): It's possible to use ironic.nova.compute.manager.ClusteredComputeManager
     # here, but at the current time it's not recommended
@@ -110,7 +110,7 @@ nova_virt_types:
     nova_scheduler_tracks_instance_changes: False
   kvm:
     nova_compute_driver: libvirt.LibvirtDriver
-    nova_scheduler_host_manager: nova.scheduler.host_manager.HostManager
+    nova_scheduler_host_manager: host_manager
     nova_reserved_host_memory_mb: 2048
     nova_compute_manager: nova.compute.manager.ComputeManager
     nova_firewall_driver: nova.virt.firewall.NoopFirewallDriver
@@ -118,7 +118,7 @@ nova_virt_types:
     nova_scheduler_tracks_instance_changes: True
   qemu:
     nova_compute_driver: libvirt.LibvirtDriver
-    nova_scheduler_host_manager: nova.scheduler.host_manager.HostManager
+    nova_scheduler_host_manager: host_manager
     nova_reserved_host_memory_mb: 2048
     nova_compute_manager: nova.compute.manager.ComputeManager
     nova_firewall_driver: nova.virt.firewall.NoopFirewallDriver
@@ -285,7 +285,6 @@ nova_scheduler_max_attempts: 5
 nova_scheduler_default_filters: "RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,AggregateCoreFilter,AggregateDiskFilter"
 nova_scheduler_driver: filter_scheduler
 nova_scheduler_available_filters: nova.scheduler.filters.all_filters
-nova_scheduler_host_manager: host_manager
 nova_scheduler_weight_classes: nova.scheduler.weights.all_weighers
 nova_scheduler_program_name: nova-scheduler
 
