@@ -1,7 +1,7 @@
 [all]
-localhost ansible_connection=local ansible_become=True
-infra1 ansible_host=10.100.100.101 ansible_become=True ansible_user=root
-openstack1 ansible_host=10.100.100.102 ansible_become=True ansible_user=root
+localhost ansible_connection=local ansible_become=True neutron_local_ip=10.100.101.1
+infra1 ansible_host=10.100.100.101 ansible_become=True ansible_user=root tunnel_address=10.100.101.101
+openstack1 ansible_host=10.100.100.102 ansible_become=True ansible_user=root tunnel_address=10.100.101.102 neutron_local_ip=10.100.101.102
 
 [all_containers]
 infra1

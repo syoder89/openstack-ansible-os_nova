@@ -13,6 +13,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Make /lib/modules accessible on neutron_agent containers
+  hosts: neutron_agent
+  user: root
+  gather_facts: true
+  tasks:
+    - name: Use the unconfined aa profile
+      lxc_container:
+        name: "{{ container_name }}"
+        container_config:
+          - "lxc.aa_profile=unconfined"
+      delegate_to: "{{ physical_host }}"
+    - name: Neutron extra lxc config
+      lxc_container:
+        name: "{{ container_name }}"
+        container_command: |
+          [[ ! -d "/lib/modules" ]] && mkdir -p "/lib/modules"
+        container_config:
+          - "lxc.cgroup.devices.allow=a *:* rmw"
+          - "lxc.mount.entry=/lib/modules lib/modules none bind 0 0"
+      delegate_to: "{{ physical_host }}"
+    - name: Wait for ssh to be available
+      local_action:
+        module: wait_for
+        port: "{{ ansible_ssh_port | default('22') }}"
+        host: "{{ ansible_ssh_host | default(inventory_hostname) }}"
+        search_regex: OpenSSH
+        delay: 1
+    - name: Add iptables rule for communication w/ metadata agent
+      command: /sbin/iptables -t mangle -A POSTROUTING -p tcp --sport 80 -j CHECKSUM --checksum-fill
+
 - name: Deploy neutron
   hosts: neutron_all
   user: root
