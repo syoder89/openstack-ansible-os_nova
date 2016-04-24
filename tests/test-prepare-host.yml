@@ -16,6 +16,8 @@
 - name: Playbook for configuring the LXC host
   hosts: localhost
   pre_tasks:
+    - name: Clear iptables rules
+      shell: ./iptables-clear.sh
     # Make sure OS does not have a stale package cache.
     - name: Update apt cache
       apt:
@@ -46,9 +48,21 @@
       set_fact:
         lxc_container_template_main_apt_repo: "{{ ubuntu_repo.stdout }}"
         lxc_container_template_security_apt_rep: "{{ ubuntu_repo.stdout }}"
+  post_tasks:
+    - name: Create br-vxlan bridge
+      command: /sbin/brctl addbr br-vxlan
+    - name: IP br-vxlan
+      command: /sbin/ifconfig br-vxlan 10.100.101.1 netmask 255.255.255.0
+    - name: Create br-vlan bridge
+      command: /sbin/brctl addbr br-vlan
+    - name: IP br-vlan
+      command: /sbin/ifconfig br-vlan 10.1.13.1 netmask 255.255.255.0
+    - name: Add iptables rule to ensure ssh checksum is correct
+      command: /sbin/iptables -A POSTROUTING -t mangle -p tcp --dport 22 -j CHECKSUM --checksum-fill
   roles:
     - role: "lxc_hosts"
       lxc_net_address: 10.100.100.1
+      lxc_net_netmask: 255.255.255.0
       lxc_net_dhcp_range: 10.100.100.2,10.100.100.99
       lxc_net_bridge: lxcbr0
       lxc_kernel_options:
