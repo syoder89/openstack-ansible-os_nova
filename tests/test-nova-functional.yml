@@ -19,7 +19,9 @@
   gather_facts: false
   tasks:
     - name: Run tempest
-      command: /opt/openstack_tempest_gate.sh scenario
+      shell: |
+        . /opt/tempest_{{ tempest_git_install_branch }}/bin/activate
+        /opt/tempest_{{ tempest_git_install_branch }}/run_tempest.sh --no-virtual-env ${RUN_TEMPEST_OPTS} tempest.scenario.test_server_basic_ops.TestServerBasicOps.test_server_basic_ops
       environment:
         RUN_TEMPEST_OPTS: "--serial"
   vars_files:
