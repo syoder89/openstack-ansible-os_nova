@@ -13,58 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Create DB for service
-  mysql_db:
-    login_user: "{{ galera_root_user }}"
-    login_password: "{{ galera_root_password }}"
-    login_host: "{{ nova_galera_address }}"
-    name: "{{ nova_galera_database }}"
-    state: "present"
-  tags:
-    - nova-db-setup
-
-- name: Grant access to the DB for the service
-  mysql_user:
-    login_user: "{{ galera_root_user }}"
-    login_password: "{{ galera_root_password }}"
-    login_host: "{{ nova_galera_address }}"
-    name: "{{ nova_galera_user }}"
-    password: "{{ nova_container_mysql_password }}"
-    host: "{{ item }}"
-    state: "present"
-    priv: "{{ nova_galera_database }}.*:ALL"
-  with_items:
-    - "localhost"
-    - "%"
-  tags:
-    - nova-db-setup
-
-- name: Create API DB for service
-  mysql_db:
-    login_user: "{{ galera_root_user }}"
-    login_password: "{{ galera_root_password }}"
-    login_host: "{{ nova_api_galera_address }}"
-    name: "{{ nova_api_galera_database }}"
-    state: "present"
-  tags:
-    - nova-db-setup
-
-- name: Grant access to the API DB for the service
-  mysql_user:
-    login_user: "{{ galera_root_user }}"
-    login_password: "{{ galera_root_password }}"
-    login_host: "{{ nova_api_galera_address }}"
-    name: "{{ nova_api_galera_user }}"
-    password: "{{ nova_api_container_mysql_password }}"
-    host: "{{ item }}"
-    state: "present"
-    priv: "{{ nova_api_galera_database }}.*:ALL"
-  with_items:
-    - "localhost"
-    - "%"
-  tags:
-    - nova-db-setup
-
 - name: Perform a Nova DB sync
   command: "{{ nova_bin }}/nova-manage db sync"
   become: yes

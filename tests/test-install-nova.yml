@@ -37,8 +37,8 @@
       delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['nova_all'][0]
       tags:
-        - aodh-rabbitmq
-        - aodh-rabbitmq-vhost
+        - nova-rabbitmq
+        - nova-rabbitmq-vhost
     - name: Ensure rabbitmq user
       rabbitmq_user:
         user: "{{ nova_rabbitmq_userid }}"
@@ -51,13 +51,13 @@
       delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['nova_all'][0]
       tags:
-        - aodh-rabbitmq
-        - aodh-rabbitmq-user
+        - nova-rabbitmq
+        - nova-rabbitmq-user
     - name: Create DB for service
       mysql_db:
-        login_user: "root"
-        login_password: "secrete"
-        login_host: "localhost"
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "{{ nova_galera_address }}"
         name: "{{ nova_galera_database }}"
         state: "present"
       delegate_to: "10.100.102.101"
@@ -66,9 +66,9 @@
         - mysql-db-setup
     - name: Grant access to the DB for the service
       mysql_user:
-        login_user: "root"
-        login_password: "secrete"
-        login_host: "localhost"
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "{{ nova_galera_address }}"
         name: "{{ nova_galera_database }}"
         password: "{{ nova_container_mysql_password }}"
         host: "{{ item }}"
@@ -81,6 +81,32 @@
       when: inventory_hostname == groups['nova_all'][0]
       tags:
         - mysql-db-setup
+    - name: Create API DB for service
+      mysql_db:
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "{{ nova_api_galera_address }}"
+        name: "{{ nova_api_galera_database }}"
+        state: "present"
+      when: inventory_hostname == groups['nova_all'][0]
+      tags:
+        - nova-db-setup
+    - name: Grant access to the API DB for the service
+      mysql_user:
+        login_user: "{{ galera_root_user }}"
+        login_password: "{{ galera_root_password }}"
+        login_host: "{{ nova_api_galera_address }}"
+        name: "{{ nova_api_galera_user }}"
+        password: "{{ nova_api_container_mysql_password }}"
+        host: "{{ item }}"
+        state: "present"
+        priv: "{{ nova_api_galera_database }}.*:ALL"
+      with_items:
+        - "localhost"
+        - "%"
+      when: inventory_hostname == groups['nova_all'][0]
+      tags:
+        - nova-db-setup
   roles:
     - role: "{{ rolename | basename }}"
   vars_files:

@@ -18,6 +18,7 @@ cinder_ceph_client: cinder
 debug: true
 external_lb_vip_address: 10.100.102.102
 galera_client_drop_config_file: false
+galera_root_user: root
 galera_root_password: secrete
 glance_container_mysql_password: "SuperSecrete"
 glance_developer_mode: true
@@ -79,6 +80,8 @@ neutron_service_user_name: neutron
 neutron_venv_tag: testing
 nova_api_container_mysql_password: "SuperSecrete"
 nova_api_galera_address: 10.100.102.101
+nova_api_galera_database: nova_api
+nova_api_galera_user: nova_api
 nova_container_mysql_password: "SuperSecrete"
 nova_developer_mode: true
 nova_galera_address: 10.100.102.101
