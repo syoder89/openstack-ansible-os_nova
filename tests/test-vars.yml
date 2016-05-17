@@ -127,4 +127,3 @@ tempest_service_available_horizon: False
 tempest_service_available_neutron: True
 tempest_service_available_nova: True
 tempest_service_available_swift: False
-verbose: true
