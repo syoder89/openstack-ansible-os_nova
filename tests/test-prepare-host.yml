@@ -49,6 +49,11 @@
         lxc_container_template_main_apt_repo: "{{ ubuntu_repo.stdout }}"
         lxc_container_template_security_apt_rep: "{{ ubuntu_repo.stdout }}"
   post_tasks:
+# The elegant solution: change the bridge everywhere to replicate the standard behaviour
+    - name: Create br-mgmt bridge
+      command: /sbin/brctl addbr br-mgmt
+    - name: IP br-mgmt
+      command: /sbin/ifconfig br-mgmt 10.100.102.1 netmask 255.255.255.0
     - name: Create br-vxlan bridge
       command: /sbin/brctl addbr br-vxlan
     - name: IP br-vxlan
@@ -59,6 +64,8 @@
       command: /sbin/ifconfig br-vlan 10.1.13.1 netmask 255.255.255.0
     - name: Add iptables rule to ensure ssh checksum is correct
       command: /sbin/iptables -A POSTROUTING -t mangle -p tcp --dport 22 -j CHECKSUM --checksum-fill
+    - name: Add iptables rules for lxc natting
+      command: /usr/local/bin/lxc-system-manage iptables-create
   roles:
     - role: "lxc_hosts"
       lxc_net_address: 10.100.100.1

@@ -22,7 +22,7 @@
       rabbitmq_vhost:
         name: "{{ keystone_rabbitmq_vhost }}"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['keystone_all'][0]
       tags:
         - aodh-rabbitmq
@@ -36,7 +36,7 @@
         read_priv: ".*"
         write_priv: ".*"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['keystone_all'][0]
       tags:
         - aodh-rabbitmq
@@ -48,7 +48,7 @@
         login_host: "localhost"
         name: "{{ keystone_galera_database }}"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['keystone_all'][0]
       tags:
         - mysql-db-setup
@@ -65,7 +65,7 @@
       with_items:
         - "localhost"
         - "%"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['keystone_all'][0]
       tags:
         - mysql-db-setup
