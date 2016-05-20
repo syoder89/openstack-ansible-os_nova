@@ -22,7 +22,7 @@
       rabbitmq_vhost:
         name: "{{ glance_rabbitmq_vhost }}"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['glance_all'][0]
     - name: Ensure rabbitmq user
       rabbitmq_user:
@@ -33,7 +33,7 @@
         read_priv: ".*"
         write_priv: ".*"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['glance_all'][0]
     - name: Create DB for service
       mysql_db:
@@ -42,7 +42,7 @@
         login_host: "localhost"
         name: "{{ glance_galera_database }}"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['glance_all'][0]
     - name: Grant access to the DB for the service
       mysql_user:
@@ -57,7 +57,7 @@
       with_items:
         - "localhost"
         - "%"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['glance_all'][0]
   roles:
     - role: "os_glance"

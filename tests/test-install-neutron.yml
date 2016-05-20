@@ -60,7 +60,7 @@
       rabbitmq_vhost:
         name: "{{ neutron_rabbitmq_vhost }}"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['neutron_all'][0]
       tags:
         - neutron-rabbitmq
@@ -74,7 +74,7 @@
         read_priv: ".*"
         write_priv: ".*"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['neutron_all'][0]
       tags:
         - neutron-rabbitmq
@@ -86,7 +86,7 @@
         login_host: "localhost"
         name: "{{ neutron_galera_database }}"
         state: "present"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['neutron_all'][0]
       tags:
         - mysql-db-setup
@@ -103,7 +103,7 @@
       with_items:
         - "localhost"
         - "%"
-      delegate_to: "10.100.100.101"
+      delegate_to: "10.100.102.101"
       when: inventory_hostname == groups['neutron_all'][0]
       tags:
         - mysql-db-setup
