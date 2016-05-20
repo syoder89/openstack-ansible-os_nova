@@ -1,5 +1,5 @@
 ---
-# Copyright 2014, Rackspace US, Inc.
+# Copyright 2016, IBM Corp.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,12 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: nova_compute_kvm.yml
-  when: nova_virt_type == 'kvm' or nova_virt_type == 'qemu'
+- include: nova_compute_powervm_install.yml
 
-- include: nova_compute_powervm.yml
-  when: nova_virt_type == 'powervm'
+- name: Add nova user to pvm_admin group
+  user:
+    name: "{{ nova_system_user_name }}"
+    groups: "pvm_admin"
+    append: "yes"
+  tags:
+    - nova-powervm
 
-- include: nova_compute_key_populate.yml
-
-- include: nova_compute_key_distribute.yml
+- name: Ensure powervm permissions
+  shell: "udevadm trigger"
+  tags:
+    - nova-powervm
