@@ -53,6 +53,7 @@ nova_system_group_name: nova
 nova_system_shell: /bin/bash
 nova_system_comment: nova system user
 nova_system_home_folder: "/var/lib/{{ nova_system_user_name }}"
+nova_libvirt_save_path: "{{ nova_system_home_folder }}/save"
 
 ## Manually specified nova UID/GID
 # Deployers can specify a UID for the nova user as well as the GID for the
@@ -397,6 +398,8 @@ nova_pip_packages:
   - nova
   - python-cephlibs
 
+nova_qemu_user: libvirt-qemu
+nova_qemu_group: kvm
 
 ## Tunable overrides
 nova_nova_conf_overrides: {}
